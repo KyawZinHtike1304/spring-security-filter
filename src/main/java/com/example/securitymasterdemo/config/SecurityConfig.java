@@ -21,15 +21,33 @@ public class SecurityConfig {
         http.logout(c->c.logoutUrl("/logout")
                 .logoutSuccessUrl("/login").permitAll());
 
-        http.authorizeHttpRequests(c -> {
-            c.requestMatchers("/bootstrap/**","/").permitAll()
-           .requestMatchers("/customer/list-customers")
-                   .hasAnyRole("CUSTOMER_READ","SUPER_ADMIN")
-                   .requestMatchers("/customer/**")
-                   .hasRole("SUPER_ADMIN")
-                   .anyRequest().permitAll();
-        });
+//        http.authorizeHttpRequests(c -> {
+//            c.requestMatchers("/bootstrap/**","/").permitAll()
+//           .requestMatchers("/customer/list-customers")
+//                   .hasAnyRole("CUSTOMER_READ","SUPER_ADMIN")
+//                    .requestMatchers("/department/create-department").hasRole("DEPARTMENT_WRITE")
+//                    .requestMatchers("/department/list-departments").hasRole("DEPARTMENT_READ")
+//                    .requestMatchers("/customer/**").hasRole("SUPER_ADMIN")
+//                    .requestMatchers("/employee/**").hasAnyRole("SUPER_ADMIN","EMPLOYEE_ADMIN")
+//                    .requestMatchers("/department/**").hasRole("SUPER_ADMIN")
+//                   .anyRequest().permitAll();
+//        });
 
+        http.authorizeHttpRequests(c -> {
+            c.requestMatchers("/bootstrap/","/").permitAll()
+                    .requestMatchers("/customer/list-customers")
+                    .hasAnyRole("CUSTOMER_READ","SUPER_ADMIN")
+                    .requestMatchers("/department/list-departments", "department/create-department", "department/save-department")
+                    .hasAnyRole("SUPER_ADMIN", "DEPARTMENT_WRITE", "DEPARTMENT_READ")
+                    .requestMatchers("/customer/**").hasRole("SUPER_ADMIN")
+                    .requestMatchers("/department/**").hasRole("SUPER_ADMIN")
+                    .requestMatchers("/employee/**")
+                    .hasAnyRole("SUPER_ADMIN","EMPLOYEE_ADMIN")
+
+
+
+                    .anyRequest().permitAll();
+        });
 
         http.csrf(c -> c.disable());
 
@@ -49,8 +67,8 @@ public class SecurityConfig {
                 .password("emma")
                 .roles("EMPLOYEE_ADMIN").build();
 
-        var lucus = User.withUsername("lucus")
-                .password("lucus")
+        var lucas = User.withUsername("lucas")
+                .password("lucas")
                 .roles("DEPARTMENT_READ","DEPARTMENT_WRITE").build();
 
         var richard = User.withUsername("richard")
@@ -63,7 +81,7 @@ public class SecurityConfig {
 
         uds.createUser(john);
         uds.createUser(emma);
-        uds.createUser(lucus);
+        uds.createUser(lucas);
         uds.createUser(richard);
         uds.createUser(james);
 
