@@ -5,9 +5,11 @@
 
 <main role="main">
 
-    <div class="container mt-5">
-        <h3 class="text-center text-danger" >Forbidden Error</h3>
-        <a th:href="@{/}" class="btn btn-primary">Go to Home</a>
+    <div class="container mt-5 text-center">
+        <h1>We're sorry.You got an error !</h1>
+        <h2 class="text-danger" th:text="${statusCode}"></h2>
+        <h3 class="text-danger" th:text="${message}"></h3>
+
     </div>
 
 </main>
